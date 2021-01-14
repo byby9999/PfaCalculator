@@ -1,0 +1,113 @@
+
+<h1 class="ml-3 mt-3">Calculator taxe PFA - IT</h1>
+
+<div class="ml-3 mr-3">
+<p>Alege optiunile si afla taxele. Momentan formula functioneaza doar pe industria IT, pe orasele - resedinta de judet. Doresc insa sa extind curand si spre celelalte posibilitati.</p>
+<br>
+<form (ngSubmit)="calculateTaxes()">
+  <div class="row">
+  <div class="form-group col-lg-2">
+    <label for="net">
+        <i class="fa fa-info-circle mr-1" tooltip="Totalul sumei cheltuite de angajator pentru prestatorul de servicii">
+        </i> 
+        Venit Brut Lunar
+      </label>
+    <input type="text" class="form-control" id="brutLunar" [(ngModel)]="brutLunar" name="brutLunar">
+  </div>
+  <div class="form-group col-lg-2">
+    <label for="minim">
+        <i class="fa fa-info-circle mr-1" tooltip="Impus de catre guvern, stabilit per an calendaristic. Valoarea precompletata este pentru 2020">
+        </i> 
+      Brut minim pe economie</label>
+    <input type="text" class="form-control" id="minim" [(ngModel)]="minEconomie" name="minEconomie">
+  </div>
+  <div class="form-group col-lg-2">
+    <label>Optiuni de impozitare</label>
+    <div>
+      <button type="button" class="btn btn-primary" id="impNorma">Norma</button>
+      <button type="button" class="btn btn-primary ml-1" id="impReal" disabled>Real</button>
+    </div>
+  </div>
+  <div class="form-group col-lg-2">
+    <label>Judetul pentru sediu</label>
+    <div class="form-group" dropdown>
+      <select type="number" [(ngModel)]="norma" name="selectednorma" (ngModelChange)="setNorma()" class="form-control">
+        <option *ngFor="let j of judete" [ngValue]="j.norma">{{j.judet}}</option>
+      </select>
+      
+    </div>
+  </div> 
+  <div class="col-lg-2">
+    <p> </p>
+    <div><button type="submit" class="btn btn-info btn-lg mt-2">Calculeaza</button></div>
+  </div>
+</div>
+</form>
+ 
+<div class="row">
+  <div class="col-lg-4">
+      <h3>Contributii Anuale</h3>
+      <div>
+        <p> 
+          <i class="fa fa-info-circle mr-1" tooltip="Impozit pe venituri - 10% * Baza, unde Baza este in cazul normei, chiar norma publicata pentru judetul respectiv, unde este sediul. Sau in cazul sistem real - Baza = Total incasari - Total cheltuieli deduse">
+          </i> 
+          <strong>Impozit venit:</strong> {{impozitVenit}} <span>({{impozitVenit / totalTaxe * 100 | number:'2.2-2'}}% din total taxe)</span>
+        </p>
+        <p> 
+          <i class="fa fa-info-circle mr-1" tooltip="CAS - 25% * Baza, unde Baza este la alegere, insa trebuie sa fie minimum 12 x Salarii minime brute pe tara, pentru anul respectiv.">
+          </i> 
+          <strong>CAS:</strong> {{cas}} <span>({{cas / totalTaxe * 100 | number:'2.2-2'}}% din total taxe)</span>
+        </p>
+        <p> 
+          <i class="fa fa-info-circle mr-1" tooltip="CASS - 10% * Baza, iar Baza de calcul este doar nivelul salariului minim brut pe țară.">
+          </i> 
+          <strong>CASS:</strong> {{cass}} <span>({{cass / totalTaxe * 100 | number:'2.2-2'}}% din total taxe)</span>
+        </p>
+        <p>
+          <strong>Total Taxe:</strong> {{impozitVenit + cas + cass}}
+        </p>
+      </div>
+  </div>
+  <div class="col-lg-4">
+      <h3>Media contributiilor lunare</h3>
+      <div>
+          <p>
+              <strong>Impozit venit:</strong> {{impozitVenit / 12 | number:'2.2-2'}}
+          </p>
+          <p>
+              <strong>CAS:</strong> {{cas / 12 | number:'2.2-2'}}
+          </p>
+          <p>
+              <strong>CASS:</strong> {{cass / 12 | number:'2.2-2'}}
+          </p>
+          <p>
+              <strong>Media Lunara:</strong> {{(impozitVenit + cas + cass) / 12 | number:'2.2-2'}}
+          </p>
+      </div>
+  </div>
+  <div class="col-lg-4">
+      <h3>Sume nete, Dupa Taxe</h3>
+      <div>
+          <p>
+              <strong>Venit anual NET:</strong> {{brutLunar * 12 - impozitVenit - cas - cass | number:'2.2-2'}}
+          </p>
+          <p>
+              <strong>Venit lunar NET:</strong> {{(brutLunar * 12 - impozitVenit - cas - cass) / 12 | number:'2.2-2'}}
+          </p>
+      </div>
+  </div>
+</div>
+
+<div class="row">
+    <p class="ml-3">Informatii PFA si contributii:</p><br>
+    <ul>
+        <li>CAS si CASS sunt obligatorii doar dacă PFA-urile estimează pentru anul 2019 venituri nete a căror valoare cumulată este cel puțin egală cu 12 salarii minime brute pe țară</li>
+        <li>In cazul contrar, aceste PFA-uri nu datoreaza CAS sau CASS</li>
+        <li>Aplicatia este in lucru. La ce lucrez: varianta de calcul pentru impozitare in sistem real + Adaugarea celorlalte norme pentru toate judetele tarii e si ea in lucru, fiindca fiecare judet publica in alte moduri si formate aceste norme anuale.</li>
+    </ul>
+</div>
+
+</div>
+
+
+ 
